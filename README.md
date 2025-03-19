@@ -21,7 +21,7 @@ To complete commands/file/topic names etc.: press `Tab` after first letters (`Ta
 
 
 Note: Some commands require installation of additional packages with 
-`sudo apt install ros-humble-rqt-graph ros-humble-rqt-plot ros-humble-rqt-reconfigure`
+`sudo apt install ros-humble-rqt-graph ros-humble-rqt-plot ros-humble-rqt-reconfigure; pip install pyserial`
 
 ## First steps in ROS
 
@@ -46,7 +46,7 @@ Note: Some commands require installation of additional packages with
 1. Have two terminals open: one for performing the actual tasks (T1) and another for building the package (T2) 
 2. In T2 
     - stay in the main workspace folder (`*_ws`)
-    - to rebuild packages in the workspace run `colcon build`
+    - to rebuild packages after creation/changes - run `colcon build`
     - note: usually you will want to speed up the process by adding `--packages-select` parameter to the build command, so it will become `colcon build --packages-select *your_package_name*`
     - to refresh the setup after build run `source install/setup.bash`
     - note: you may combine the two commands as `colcon build --packages-select bip_package; source install/setup.bash`
@@ -66,7 +66,7 @@ Note: Some commands require installation of additional packages with
 Using the ROS 2 tutorial we will create a basic publisher sending string messages.
 
 1. Open the https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html webpage to create a publisher sending String messages
-2. Follow the steps in the section 2 of the tutorial, note the modifications to the package files
+2. Follow the steps in the **section 2** of the tutorial, note the modifications to the package files
 3. Use the topic name `/chatter` instead of `/topic` from the tutorial
 4. When ready, build and run; use the subscriber from *First steps..* to verify
 
@@ -85,14 +85,17 @@ Now the publisher will be modified, to send the random data in `AccelStamped` fo
     - Build and run
 4. Verify the publisher works correctly
     - using tools from *First steps...*
+    - note: check values of the fileds sent, including the header
     - plotting graph with rqt_plot
         - run `ros2 run rqt_plot rqt_plot` 
         - select topic and add fields to inspect
         - note: in `rqt_plot` the fields are separated with "`/`", not "`.`"
+        - note: to get correct plot, the timestamp field of the message should be set; to fill it with the current time you may use `msg.header.stamp = self.get_clock().now().to_msg()` (where self is the class derived from `Node`)
     - vizualizing with rviz
         - run `rviz2` 
         - use add - by topic - AccelStamped
-        - note: if you do not see the result, check plot tree for errors and inspect fields of the message, including the header
+        - note: if you do not see the result, check plot tree for errors and inspect fields of the message
+        - note: `frame_id` field of the header should contain a name (string) of a coordinate frame (you may use any now)
 5. (bonus) Add dynamic parameters to the script
     - Add to the import section
 
@@ -121,6 +124,8 @@ Now the publisher will be modified, to send the random data in `AccelStamped` fo
 
 The next task is to replace the simulated data with the real measurements read from the serial port.
 
+Upload to the ESP32 module your code sending accelerometer data.
+
 1. Connect the board to the USB port
 2. Enable the access to the USB device from the VM 
     - mark the proper checkbox in Devices - USB
@@ -132,6 +137,7 @@ The next task is to replace the simulated data with the real measurements read f
 4. Create a new script or modify the simulator
     - read the message from the serial port, transform it to 3 parameter vector and publish it as the `AccelStamped` message
     - verify the publisher with `rviz2` and/or `rqt_plot`
+    - note: you may use regular expressions (`re`) select data from the string, but it may be easier to modify the ESP32 code to send data in simplified form (i.e. comma separated numbers)
 
 
 # Bonus tasks
