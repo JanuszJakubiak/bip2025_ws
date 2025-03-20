@@ -23,6 +23,7 @@ setup(
             'hello = bip_package.my_talker:main',
             'my_talker = bip_package.publisher_member_function:main',
             'imu_simulator = bip_package.imu_simulator:main',
+            'tf_simulator = bip_package.rollpitch_simulator:main',
         ],
     },
 )
