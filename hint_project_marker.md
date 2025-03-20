@@ -1,4 +1,4 @@
-# project hints
+# Project hints
 
 ## Recording the data
 
@@ -22,7 +22,7 @@ All data sent as topics in ROS can be easily recorded (and replayed later) using
 
 More information may be found in https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Recording-And-Playing-Back-Data/Recording-And-Playing-Back-Data.html
 
-## vizualization hint
+## Visualization hint
 
 If you want to vizualize roll and pitch data in rviz2 you may use Marker message type together with broadcasting transformation frame in `/tf` topic. 
 
